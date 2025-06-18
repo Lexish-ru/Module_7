@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('lms.urls')),   # или другое имя твоего app
+    path('api/', include('study.urls')),   # или другое имя твоего app
 ]
 
 # Подключаем отдачу медиафайлов в режиме разработки
