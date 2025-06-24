@@ -21,10 +21,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('study.urls')),   # или другое имя твоего app
+    #path('api/users/', include(('users.urls', 'users'), namespace='users')),     # <--- вот namespace!
+    path('api/', include(('study.urls', 'study'), namespace='study')),           # <--- вот namespace!
 ]
 
-# Подключаем отдачу медиафайлов в режиме разработки
+# Для отдачи media-файлов в режиме DEBUG
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
