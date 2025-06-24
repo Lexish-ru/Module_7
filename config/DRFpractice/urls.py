@@ -21,8 +21,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('api/users/', include(('users.urls', 'users'), namespace='users')),     # <--- вот namespace!
-    path('api/', include(('study.urls', 'study'), namespace='study')),           # <--- вот namespace!
+    path('api/payments/', include(('users.urls', 'payments-list'), namespace='payments')),
+    path('api/', include(('study.urls', 'study'), namespace='study')),
 ]
 
 # Для отдачи media-файлов в режиме DEBUG
