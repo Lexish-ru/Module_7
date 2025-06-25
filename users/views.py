@@ -22,3 +22,11 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+class UserRegisterView(generics.CreateAPIView):
+    """
+    Регистрация нового пользователя.
+    """
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
