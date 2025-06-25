@@ -5,6 +5,9 @@ from .models import Payment
 from .serializers import PaymentSerializer
 
 class PaymentListView(generics.ListAPIView):
+    """
+    Эндпоинт для получения списка платежей с возможностью фильтрации и сортировки.
+    """
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]

@@ -53,6 +53,9 @@ class CustomUser(AbstractUser):
 
 
 class Payment(models.Model):
+    """
+    Модель платежей
+    """
     PAYMENT_CHOICES = [
         ('cash', 'Наличные'),
         ('transfer', 'Перевод на счет'),

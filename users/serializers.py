@@ -4,6 +4,9 @@ from .models import CustomUser, Payment
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для платежей
+    """
     class Meta:
         model = Payment
         fields = ['id', 'user', 'date', 'course', 'lesson', 'amount', 'method']
