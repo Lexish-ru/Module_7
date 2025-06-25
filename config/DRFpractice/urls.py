@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -23,6 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users/', include(('users.urls', 'users'), namespace='users')),
     path('api/', include(('study.urls', 'study'), namespace='study')),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 # Для отдачи media-файлов в режиме DEBUG
