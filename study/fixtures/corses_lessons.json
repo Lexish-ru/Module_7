@@ -1,0 +1,53 @@
+[
+  {
+    "model": "study.course",
+    "pk": 1,
+    "fields": {
+      "title": "Основы Django",
+      "preview": "",
+      "description": "Вводный курс по Django"
+    }
+  },
+  {
+    "model": "study.course",
+    "pk": 2,
+    "fields": {
+      "title": "Django REST Framework",
+      "preview": "",
+      "description": "Курс по DRF"
+    }
+  },
+  {
+    "model": "study.lesson",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "title": "Установка Django",
+      "description": "Первый шаги",
+      "preview": "",
+      "video_url": "https://youtube.com/django-setup"
+    }
+  },
+  {
+    "model": "study.lesson",
+    "pk": 2,
+    "fields": {
+      "course": 1,
+      "title": "Модели и миграции",
+      "description": "Работа с моделями",
+      "preview": "",
+      "video_url": "https://youtube.com/django-models"
+    }
+  },
+  {
+    "model": "study.lesson",
+    "pk": 3,
+    "fields": {
+      "course": 2,
+      "title": "Введение в DRF",
+      "description": "Знакомство с DRF",
+      "preview": "",
+      "video_url": "https://youtube.com/drf-intro"
+    }
+  }
+]
