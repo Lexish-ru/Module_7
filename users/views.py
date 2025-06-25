@@ -1,8 +1,8 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from .models import Payment
-from .serializers import PaymentSerializer
+from .models import Payment, CustomUser
+from .serializers import PaymentSerializer, UserSerializer
 
 class PaymentListView(generics.ListAPIView):
     """
@@ -14,3 +14,11 @@ class PaymentListView(generics.ListAPIView):
     filterset_fields = ['course', 'lesson', 'method']
     ordering_fields = ['date']
     ordering = ['-date']
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    CRUD для пользователей.
+    """
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
