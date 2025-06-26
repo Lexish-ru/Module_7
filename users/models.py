@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.conf import settings
+from study.models import Course, Lesson
+
 
 class CustomUserManager(BaseUserManager):
     """
@@ -47,3 +50,23 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Payment(models.Model):
+    """
+    Модель платежей
+    """
+    PAYMENT_CHOICES = [
+        ('cash', 'Наличные'),
+        ('transfer', 'Перевод на счет'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='payments')
+    date = models.DateTimeField(auto_now_add=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True, related_name='payments')
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, related_name='payments')
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    method = models.CharField(max_length=16, choices=PAYMENT_CHOICES)
+
+    def __str__(self):
+        return f"{self.user} - {self.amount} - {self.method} ({self.date.date()})"

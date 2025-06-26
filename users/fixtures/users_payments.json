@@ -1,0 +1,80 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$testhash1",
+      "email": "alice@example.com",
+      "phone": "+70000000001",
+      "city": "Москва",
+      "avatar": "",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$testhash2",
+      "email": "bob@example.com",
+      "phone": "+70000000002",
+      "city": "СПб",
+      "avatar": "",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$testhash3",
+      "email": "carol@example.com",
+      "phone": "+70000000003",
+      "city": "Екатеринбург",
+      "avatar": "",
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false
+    }
+  },
+{
+    "model": "users.payment",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "course": 1,
+      "lesson": null,
+      "amount": "2000.00",
+      "method": "cash",
+      "date": "2024-07-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "users.payment",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "course": 2,
+      "lesson": null,
+      "amount": "3000.00",
+      "method": "transfer",
+      "date": "2024-07-02T13:30:00Z"
+    }
+  },
+  {
+    "model": "users.payment",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "course": null,
+      "lesson": 3,
+      "amount": "1000.00",
+      "method": "cash",
+      "date": "2024-07-03T17:00:00Z"
+    }
+  }
+]
