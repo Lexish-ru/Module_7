@@ -15,8 +15,10 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'destroy']:
-            self.permission_classes = [IsAuthenticated, IsOwnerOrModerator & ~IsModerator]
-        elif self.action in ['update', 'partial_update', 'retrieve', 'list']:
+            # Только обычные пользователи (НЕ модераторы) могут создавать и удалять!
+            self.permission_classes = [IsAuthenticated, ~IsModerator]
+        elif self.action in ['update', 'partial_update', 'retrieve']:
+            # Могут и модераторы, и владельцы своих курсов
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwnerOrModerator]
         else:
             self.permission_classes = [IsAuthenticated]
