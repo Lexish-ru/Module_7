@@ -16,16 +16,16 @@ class UserSerializer(serializers.ModelSerializer):
     """
     Сериализатор для пользователя.
     """
-    password = serializers.CharField(write_only=True)
     payments = PaymentSerializer(many=True, read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'phone', 'city', 'avatar', 'first_name', 'last_name', 'payments']
+        fields = ['id', 'email', 'password', 'phone', 'city', 'avatar', 'first_name', 'last_name', 'payments',]
 
     def create(self, validated_data):
-        password = validated_data.pop('password')
+        password = validated_data.pop('password', None)
         user = CustomUser(**validated_data)
-        user.set_password(password)
+        if password:
+            user.set_password(password)
         user.save()
         return user

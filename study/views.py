@@ -13,6 +13,10 @@ class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user)
+
     def get_permissions(self):
         if self.action in ['create', 'destroy']:
             # Только обычные пользователи (НЕ модераторы) могут создавать и удалять!
@@ -24,14 +28,26 @@ class CourseViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsAuthenticated]
         return [permission() for permission in self.permission_classes]
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class LessonListCreateView(generics.ListCreateAPIView):
     """
     Контроллер для получения списка и создания уроков.
     """
-    permission_classes = [IsAuthenticated, IsModerator | IsOwnerOrModerator]
+    permission_classes = [IsAuthenticated]
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(owner=self.request.user)
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            self.permission_classes = [IsAuthenticated, ~IsModerator]
+        return [permission() for permission in self.permission_classes]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -40,6 +56,6 @@ class LessonRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     """
     Контроллер для получения, обновления и удаления одного урока.
     """
-    permission_classes = [IsAuthenticated, IsModerator | IsOwnerOrModerator]
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
