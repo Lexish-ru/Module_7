@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from .models import Course, Lesson, Subscription
 from .permissions import IsModerator, IsOwnerOrModerator
 from .serializers import CourseSerializer, LessonSerializer
+from .paginators import StandardResultsSetPagination
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -15,6 +16,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     """
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -42,6 +44,7 @@ class LessonListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
