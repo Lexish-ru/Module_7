@@ -37,34 +37,29 @@ class CourseViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-class LessonListCreateView(generics.ListCreateAPIView):
-    """
-    Контроллер для получения списка и создания уроков.
-    """
-    permission_classes = [IsAuthenticated]
+class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(owner=self.request.user)
+        user = self.request.user
+        if user.groups.filter(name='moderators').exists():
+            return queryset
+        return queryset.filter(owner=user)
 
     def get_permissions(self):
-        if self.request.method == "POST":
+        if self.action == "create":
             self.permission_classes = [IsAuthenticated, ~IsModerator]
+        elif self.action in ["update", "partial_update", "destroy", "retrieve"]:
+            self.permission_classes = [IsAuthenticated, IsOwnerOrModerator]
+        else:
+            self.permission_classes = [IsAuthenticated]
         return [permission() for permission in self.permission_classes]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
-
-class LessonRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Контроллер для получения, обновления и удаления одного урока.
-    """
-    permission_classes = [IsAuthenticated, IsOwnerOrModerator]
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
 
 class SubscriptionAPIView(APIView):
     permission_classes = [IsAuthenticated]
