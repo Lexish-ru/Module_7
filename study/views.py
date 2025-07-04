@@ -23,11 +23,11 @@ class CourseViewSet(viewsets.ModelViewSet):
         return queryset.filter(owner=self.request.user)
 
     def get_permissions(self):
-        if self.action in ['create', 'destroy']:
-            # Только обычные пользователи (НЕ модераторы) могут создавать и удалять!
+        if self.action == 'create':
             self.permission_classes = [IsAuthenticated, ~IsModerator]
+        elif self.action == 'destroy':
+            self.permission_classes = [IsAuthenticated, IsOwnerOrModerator]
         elif self.action in ['update', 'partial_update', 'retrieve']:
-            # Могут и модераторы, и владельцы своих курсов
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwnerOrModerator]
         else:
             self.permission_classes = [IsAuthenticated]
@@ -38,6 +38,10 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 
 class LessonViewSet(viewsets.ModelViewSet):
+    """
+    Вьюсет для модели Lesson.
+    Реализует полный CRUD для уроков.
+    """
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     pagination_class = StandardResultsSetPagination

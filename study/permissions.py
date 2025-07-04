@@ -11,9 +11,6 @@ class IsOwnerOrModerator(permissions.BasePermission):
     """
     Доступ только владельцу объекта или модератору.
     """
-
     def has_object_permission(self, request, view, obj):
-        return (
-                getattr(obj, 'owner', None) == request.user or
-                request.user.groups.filter(name='moderators').exists()
-        )
+        return (obj.owner == request.user) or request.user.groups.filter(name='moderators').exists()
+
