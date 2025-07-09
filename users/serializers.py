@@ -31,5 +31,8 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class StripePaymentRequestSerializer(serializers.Serializer):
-    course_id = serializers.IntegerField()
-    method = serializers.ChoiceField(choices=['cash', 'transfer'], default='transfer')
+    """
+    Сериализатор для входных данных Stripe-платежа.
+    """
+    course_id = serializers.IntegerField(help_text="ID курса")
+    method = serializers.ChoiceField(choices=['cash', 'transfer'], default='transfer', help_text="Способ оплаты")

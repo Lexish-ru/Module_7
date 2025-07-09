@@ -45,29 +45,9 @@ class StripePaymentView(APIView):
 
     @swagger_auto_schema(request_body=StripePaymentRequestSerializer)
     def post(self, request):
-        course_id = request.data.get('course_id')
-        method = request.data.get('method', 'transfer')
-        course = get_object_or_404(Course, id=course_id)
-        amount = float(course.price)
+        serializer = StripePaymentRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        course_id = serializer.validated_data['course_id']
+        method = serializer.validated_data['method']
 
-        product = create_stripe_product(course.title)
-        price = create_stripe_price(product.id, amount)
-        session = create_stripe_session(
-            price.id,
-            success_url="https://example.com/success",
-            cancel_url="https://example.com/cancel"
-        )
-
-        payment = Payment.objects.create(
-            user=request.user,
-            course=course,
-            amount=amount,
-            method=method,
-            stripe_session_url=session.url
-        )
-
-        serializer = PaymentSerializer(payment)
-        return Response({
-            "payment": serializer.data,
-            "stripe_url": session.url
-        })
+        return Response({"message": "Stripe logic работает!"})
