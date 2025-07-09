@@ -4,10 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
 from services.stripe_service import create_stripe_product, create_stripe_price, create_stripe_session
 from study.models import Course
 from .models import Payment, CustomUser
-from .serializers import PaymentSerializer, UserSerializer
+from .serializers import PaymentSerializer, UserSerializer, StripePaymentRequestSerializer
 
 class PaymentListView(generics.ListAPIView):
     """
@@ -42,6 +43,7 @@ class StripePaymentView(APIView):
     """
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(request_body=StripePaymentRequestSerializer)
     def post(self, request):
         course_id = request.data.get('course_id')
         method = request.data.get('method', 'transfer')

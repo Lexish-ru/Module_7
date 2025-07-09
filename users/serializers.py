@@ -29,3 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
         user.save()
         return user
+
+class StripePaymentRequestSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField()
+    method = serializers.ChoiceField(choices=['cash', 'transfer'], default='transfer')
