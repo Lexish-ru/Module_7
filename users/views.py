@@ -50,4 +50,25 @@ class StripePaymentView(APIView):
         course_id = serializer.validated_data['course_id']
         method = serializer.validated_data['method']
 
-        return Response({"message": "Stripe logic работает!"})
+        course = get_object_or_404(Course, id=course_id)
+        amount = float(getattr(course, 'price', 1000))
+
+        product = create_stripe_product(course.title)
+        price = create_stripe_price(product.id, amount)
+        session = create_stripe_session(
+            price.id,
+            success_url="http://localhost:8000/",
+            cancel_url="http://localhost:8000/"
+        )
+
+        payment = Payment.objects.create(
+            user=request.user,
+            course=course,
+            amount=amount,
+            method=method,
+            stripe_session_url=session.url
+        )
+
+        response_data = PaymentSerializer(payment).data
+        response_data['stripe_url'] = session.url
+        return Response(response_data, status=201)
