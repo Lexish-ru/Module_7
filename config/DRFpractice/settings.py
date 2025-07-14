@@ -157,6 +157,8 @@ AUTH_USER_MODEL = 'users.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+DEFAULT_FROM_EMAIL=env('FROM_EMAIL')
+
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
 REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')

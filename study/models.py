@@ -17,6 +17,7 @@ class Course(models.Model):
     title = models.CharField('Название', max_length=100)
     preview = models.ImageField('Превью', upload_to='course_previews/', blank=True, null=True)
     description = models.TextField('Описание', blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         """
