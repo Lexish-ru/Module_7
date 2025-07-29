@@ -28,8 +28,8 @@ services:
              gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
-      - static:/app/static
-      - media:/app/media
+      - ./static:/app/static
+      - ./media:/app/media
     env_file:
       - .env
     depends_on:
