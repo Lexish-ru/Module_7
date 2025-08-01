@@ -39,8 +39,12 @@ jobs:
           POSTGRES_DB: Module_7
 
     env:
-      DATABASE_URL: postgres://postgres:password@localhost:5432/postgres
+      POSTGRESS_HOST: ${{ secrets.POSTGRESS_HOST }}
+      POSTGRES_USER: ${{ secrets.POSTGRESS_USER}}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRESS_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRESS_DB }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
 
     steps:
     - name: Check out code
