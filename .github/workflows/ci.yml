@@ -26,23 +26,29 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    needs: lint
 
     services:
       postgres:
         image: postgres:16
         ports:
           - 5432:5432
-
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRESS_PASSWORD }}
-          POSTGRES_DB: Module_7
+          POSTGRES_PASSWORD: PASSWORD
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     env:
-      POSTGRESS_HOST: ${{ secrets.POSTGRESS_HOST }}
-      POSTGRES_USER: ${{ secrets.POSTGRESS_USER}}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRESS_PASSWORD }}
-      POSTGRES_DB: ${{ secrets.POSTGRESS_DB }}
+      POSTGRES_HOST: localhost
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: PASSWORD
+      POSTGRES_DB: test_db
+      POSTGRES_PORT: 5432
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 
@@ -67,6 +73,13 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Wait for Postgres
+      run: |
+        until pg_isready -h localhost -p 5432 -U postgres; do
+          echo "waiting for postgres"
+          sleep2
+        done
 
     - name: Run migrations
       run: python manage.py migrate
