@@ -1,4 +1,4 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -46,8 +46,6 @@ class CourseViewSet(viewsets.ModelViewSet):
                 send_course_update_email.delay(subscription.user.email, course.title)
 
 
-
-
 class LessonViewSet(viewsets.ModelViewSet):
     """
     Вьюсет для модели Lesson.
@@ -75,6 +73,7 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
 
 class SubscriptionAPIView(APIView):
     permission_classes = [IsAuthenticated]

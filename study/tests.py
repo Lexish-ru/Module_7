@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from study.models import Course, Lesson, Subscription
 
+
 class CourseCRUDAndPermissionsTests(APITestCase):
     def setUp(self):
         self.User = get_user_model()
@@ -54,13 +55,15 @@ class CourseCRUDAndPermissionsTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
+
 class LessonCRUDAndPermissionsTests(APITestCase):
     def setUp(self):
         self.User = get_user_model()
         self.owner = self.User.objects.create_user(email='owner@test.com', password='ownerpass')
         self.other = self.User.objects.create_user(email='other@test.com', password='otherpass')
         self.course = Course.objects.create(title="Курс владельца", owner=self.owner)
-        self.lesson = Lesson.objects.create(title="Урок владельца", course=self.course, owner=self.owner, video_url='https://youtube.com/test')
+        self.lesson = Lesson.objects.create(title="Урок владельца", course=self.course, owner=self.owner,
+                                            video_url='https://youtube.com/test')
         self.client.force_authenticate(self.owner)
 
     def test_owner_can_create_lesson(self):
@@ -96,6 +99,7 @@ class LessonCRUDAndPermissionsTests(APITestCase):
         url = reverse('study:lesson-detail', args=[self.lesson.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 404)
+
 
 class SubscriptionTests(APITestCase):
     def setUp(self):

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Course(models.Model):
     """
     Модель курса.
@@ -10,8 +11,8 @@ class Course(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='courses',
-        null = True,
-        blank = True
+        null=True,
+        blank=True
     )
 
     title = models.CharField('Название', max_length=100)
@@ -25,6 +26,7 @@ class Course(models.Model):
         """
         return self.title
 
+
 class Lesson(models.Model):
     """
     Модель урока.
@@ -35,8 +37,8 @@ class Lesson(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='lessons',
-        null = True,
-        blank = True
+        null=True,
+        blank=True
     )
 
     course = models.ForeignKey(Course, related_name='lessons', on_delete=models.CASCADE)
@@ -50,6 +52,7 @@ class Lesson(models.Model):
         Возвращает название урока.
         """
         return self.title
+
 
 class Subscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='subscriptions')

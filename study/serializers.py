@@ -11,6 +11,7 @@ class LessonSerializer(serializers.ModelSerializer):
         required=False, allow_blank=True,
         validators=[YoutubeUrlValidator(field='video_url')]
     )
+
     class Meta:
         model = Lesson
         fields = ['id', 'course', 'title', 'description', 'preview', 'video_url']

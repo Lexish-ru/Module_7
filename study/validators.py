@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 class YoutubeUrlValidator:
     """Валидатор: пропускает только youtube.com, можно использовать в DRF-сериализаторе."""
     def __init__(self, field):

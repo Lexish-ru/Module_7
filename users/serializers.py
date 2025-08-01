@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import CustomUser, Payment
 
 
-
 class PaymentSerializer(serializers.ModelSerializer):
     """
     Сериализатор для платежей
@@ -29,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password)
         user.save()
         return user
+
 
 class StripePaymentRequestSerializer(serializers.Serializer):
     """

@@ -4,6 +4,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth import get_user_model
 
+
 @shared_task
 def send_course_update_email(user_email, course_title):
     send_mail(
@@ -12,6 +13,7 @@ def send_course_update_email(user_email, course_title):
         'from@example.com',
         [user_email]
     )
+
 
 @shared_task
 def deactivate_inactive_users():

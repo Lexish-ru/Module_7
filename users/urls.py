@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import UserViewSet, PaymentListView,UserRegisterView, StripePaymentView
+from .views import UserViewSet, PaymentListView, UserRegisterView, StripePaymentView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 app_name = "users"

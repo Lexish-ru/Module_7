@@ -10,6 +10,7 @@ from study.models import Course
 from .models import Payment, CustomUser
 from .serializers import PaymentSerializer, UserSerializer, StripePaymentRequestSerializer
 
+
 class PaymentListView(generics.ListAPIView):
     """
     Эндпоинт для получения списка платежей с возможностью фильтрации и сортировки.
@@ -21,6 +22,7 @@ class PaymentListView(generics.ListAPIView):
     ordering_fields = ['date']
     ordering = ['-date']
 
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     CRUD для пользователей.
@@ -29,6 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
 class UserRegisterView(generics.CreateAPIView):
     """
     Регистрация нового пользователя.
@@ -36,6 +39,7 @@ class UserRegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
+
 
 class StripePaymentView(APIView):
     """

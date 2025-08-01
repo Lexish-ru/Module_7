@@ -1,6 +1,3 @@
-
-
-
 """
 Django settings for DRFpractice project.
 
@@ -17,8 +14,10 @@ from pathlib import Path
 import environ
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -156,7 +155,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-DEFAULT_FROM_EMAIL=env('EMAIL_HOST_USER')
+DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
 
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
