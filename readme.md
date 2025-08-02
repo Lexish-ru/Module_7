@@ -1,38 +1,91 @@
-# Django REST Framework: Учебный проект
 
-Учебный проект в рамках практики по Django REST Framework.
+# DRFPractice
 
 ## Описание
 
-Это минимальный backend для онлайн-курсов на Django + DRF.
+Веб-приложение на Django REST Framework с автотестами, Docker и автоматическим CI/CD на GitHub Actions.  
+Автодеплой на VPS через SSH (docker-compose).
 
-- Кастомный пользователь (email-авторизация, телефон, город, аватар)
-- CRUD для курсов через ViewSet
-- CRUD для уроков через generic views
-- Хранение медиафайлов (картинки, аватары)
-- Конфигурация через .env
+---
+
+## Структура проекта
+
+- `config/` — конфиги Django, celery и пр.
+- `study/`, `users/` — основные приложения проекта
+- `.github/workflows/ci.yml` — файл GitHub Actions
+- `Dockerfile`, `docker-compose.yml` — сборка и запуск в Docker
+- `.env.example` — шаблон переменных окружения
+
+---
 
 ## Быстрый старт
 
-1. Клонируйте репозиторий и создайте виртуальное окружение:
+### 1. Локальный запуск
 
-    python -m venv .venv  
-    source .venv/bin/activate  
-    pip install -r requirements.txt
+```bash
+cp .env.example .env
+docker-compose up --build
+```
 
-2. Скопируйте `.env_template` в `.env` и заполните переменные окружения.
+- Приложение будет доступно на http://localhost:8000/
 
-3. Примените миграции:
+---
 
-    python manage.py migrate
+### 2. Переменные окружения
 
-4. Запустите сервер:
+Все переменные хранятся в `.env` и/или [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
 
-    python manage.py runserver
+**Пример:**
+```
+POSTGRES_DB=Module_7
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=yourpassword
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
 
-## Структура
+SECRET_KEY=your-secret-key
+DEBUG=True
+```
 
-- users/ — приложение пользователей
-- study/ — курсы и уроки
-- config/ — настройки Django
-- .env_template — пример переменных окружения
+---
+
+### 3. CI/CD и деплой
+
+- При каждом push в репозиторий запускается GitHub Actions:
+    - lint (flake8)
+    - тесты (manage.py test)
+    - сборка и пуш Docker-образа (опционально)
+    - деплой на VPS через SSH и docker-compose
+
+#### **Файл workflow:**  
+`.github/workflows/ci.yml`
+
+#### **Secrets** (GitHub):
+- SSH_KEY — приватный ключ
+- SSH_USER, SSH_HOST — логин и адрес сервера
+- DEPLOY_DIR — директория на сервере
+- SECRET_KEY и др.
+
+---
+
+## Деплой на сервер
+
+1. Добавьте свой SSH-ключ на сервер и в secrets репозитория.
+2. Укажите переменные окружения в секрете GitHub.
+3. На сервере должен быть установлен Docker и docker-compose.
+4. Деплой осуществляется автоматически через Actions.
+
+---
+
+## Документация API
+
+Swagger доступен по адресу:  
+`/swagger/` после запуска проекта.
+
+---
+
+## Авторы
+
+- [alexey](https://github.com/your-github-nickname)
+
+---
