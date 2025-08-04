@@ -1,38 +1,85 @@
-# Django REST Framework: Учебный проект
 
-Учебный проект в рамках практики по Django REST Framework.
+# DRFPractice
 
 ## Описание
+Проект реализован на Django REST Framework. Система сборки и запуска полностью контейнеризирована с помощью Docker Compose. Для CI/CD используется GitHub Actions, а переменные окружения собираются из GitHub Secrets.
 
-Это минимальный backend для онлайн-курсов на Django + DRF.
+## Структура проекта
+```
+.
+├── config/         # Основная конфигурация Django
+├── study/          # Приложение курсов
+├── users/          # Приложение пользователей
+├── static/         # Статические файлы (collectstatic)
+├── media/          # Медиа-файлы (user uploads)
+├── requirements.txt
+├── docker-compose.yaml
+├── nginx/
+│   └── nginx.conf
+├── .env            # Файл переменных окружения (генерируется из GitHub Secrets)
+└── ...
+```
 
-- Кастомный пользователь (email-авторизация, телефон, город, аватар)
-- CRUD для курсов через ViewSet
-- CRUD для уроков через generic views
-- Хранение медиафайлов (картинки, аватары)
-- Конфигурация через .env
+## Быстрый старт (Docker Compose)
+1. Клонируйте репозиторий:
+    ```sh
+    git clone https://github.com/Lexish-ru/Module_7.git
+    cd Module_7
+    ```
+2. Убедитесь, что у вас есть рабочий `.env`. В CI/CD он собирается из GitHub Secrets (см. раздел ниже).
+3. Запустите сборку и запуск:
+    ```sh
+    docker-compose up --build
+    ```
+4. Nginx будет слушать порт 80, бекенд (Django + Gunicorn) — на 8000.
 
-## Быстрый старт
+## Работа с GitHub Actions (workflows)
+- Автоматически запускаются тесты, линтеры и деплой на сервер при каждом push/pull_request в ветки репозитория.
+- Все чувствительные переменные окружения передаются в CI/CD как GitHub Secrets.
+- На сервере автоматически собирается `.env` из секретов для корректной работы приложения.
 
-1. Клонируйте репозиторий и создайте виртуальное окружение:
+## Как формируется .env
+- В файле `.env` не хранится никаких секретов — он генерируется в рантайме workflow на сервере с помощью секретов GitHub (`Settings → Secrets and variables → Actions`).
 
-    python -m venv .venv  
-    source .venv/bin/activate  
-    pip install -r requirements.txt
+---
 
-2. Скопируйте `.env_template` в `.env` и заполните переменные окружения.
+### 3. CI/CD и деплой
 
-3. Примените миграции:
+- При каждом push в репозиторий запускается GitHub Actions:
+    - lint (flake8)
+    - тесты (manage.py test)
+    - сборка и пуш Docker-образа (опционально)
+    - деплой на VPS через SSH и docker-compose
 
-    python manage.py migrate
+#### **Файл workflow:**  
+`.github/workflows/ci.yml`
 
-4. Запустите сервер:
+#### **Secrets** (GitHub):
+- SSH_KEY — приватный ключ
+- SSH_USER, SSH_HOST — логин и адрес сервера
+- DEPLOY_DIR — директория на сервере
+- SECRET_KEY и др.
 
-    python manage.py runserver
+---
 
-## Структура
+## Деплой на сервер
 
-- users/ — приложение пользователей
-- study/ — курсы и уроки
-- config/ — настройки Django
-- .env_template — пример переменных окружения
+1. Добавьте свой SSH-ключ на сервер и в secrets репозитория.
+2. Укажите переменные окружения в секрете GitHub.
+3. На сервере должен быть установлен Docker и docker-compose.
+4. Деплой осуществляется автоматически через Actions.
+
+---
+
+## Документация API
+
+Swagger доступен по адресу:  
+`/swagger/` после запуска проекта.
+
+---
+
+## Авторы
+
+- [alexey](https://github.com/Lexish-ru/)
+
+---
