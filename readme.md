@@ -2,50 +2,44 @@
 # DRFPractice
 
 ## Описание
-
-Веб-приложение на Django REST Framework с автотестами, Docker и автоматическим CI/CD на GitHub Actions.  
-Автодеплой на VPS через SSH (docker-compose).
-
----
+Проект реализован на Django REST Framework. Система сборки и запуска полностью контейнеризирована с помощью Docker Compose. Для CI/CD используется GitHub Actions, а переменные окружения собираются из GitHub Secrets.
 
 ## Структура проекта
-
-- `config/` — конфиги Django, celery и пр.
-- `study/`, `users/` — основные приложения проекта
-- `.github/workflows/ci.yml` — файл GitHub Actions
-- `Dockerfile`, `docker-compose.yml` — сборка и запуск в Docker
-- `.env.example` — шаблон переменных окружения
-
----
-
-## Быстрый старт
-
-### 1. Локальный запуск
-
-```bash
-cp .env.example .env
-docker-compose up --build
+```
+.
+├── config/         # Основная конфигурация Django
+├── study/          # Приложение курсов
+├── users/          # Приложение пользователей
+├── static/         # Статические файлы (collectstatic)
+├── media/          # Медиа-файлы (user uploads)
+├── requirements.txt
+├── docker-compose.yaml
+├── nginx/
+│   └── nginx.conf
+├── .env            # Файл переменных окружения (генерируется из GitHub Secrets)
+└── ...
 ```
 
-- Приложение будет доступно на http://localhost:8000/
+## Быстрый старт (Docker Compose)
+1. Клонируйте репозиторий:
+    ```sh
+    git clone https://github.com/Lexish-ru/Module_7.git
+    cd Module_7
+    ```
+2. Убедитесь, что у вас есть рабочий `.env`. В CI/CD он собирается из GitHub Secrets (см. раздел ниже).
+3. Запустите сборку и запуск:
+    ```sh
+    docker-compose up --build
+    ```
+4. Nginx будет слушать порт 80, бекенд (Django + Gunicorn) — на 8000.
 
----
+## Работа с GitHub Actions (workflows)
+- Автоматически запускаются тесты, линтеры и деплой на сервер при каждом push/pull_request в ветки репозитория.
+- Все чувствительные переменные окружения передаются в CI/CD как GitHub Secrets.
+- На сервере автоматически собирается `.env` из секретов для корректной работы приложения.
 
-### 2. Переменные окружения
-
-Все переменные хранятся в `.env` и/или [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets).
-
-**Пример:**
-```
-POSTGRES_DB=Module_7
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=yourpassword
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
-
-SECRET_KEY=your-secret-key
-DEBUG=True
-```
+## Как формируется .env
+- В файле `.env` не хранится никаких секретов — он генерируется в рантайме workflow на сервере с помощью секретов GitHub (`Settings → Secrets and variables → Actions`).
 
 ---
 
@@ -86,6 +80,6 @@ Swagger доступен по адресу:
 
 ## Авторы
 
-- [alexey](https://github.com/your-github-nickname)
+- [alexey](https://github.com/Lexish-ru/)
 
 ---
